@@ -5,17 +5,17 @@ import db from './config/connection.js';
 import type { Request, Response } from 'express';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
-// import { typeDefs, reslolvers } from './schemas/index.js';
+import { typeDefs, resolvers } from './schemas/index.js';
 import { authenticateToken } from './services/auth.js';
 
-// const server = new ApolloServer({
-//   typeDefs,
-//   resolvers,
-// });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
 
 const startApolloServer = async () => {
-  // await server.start();
-  // await db();
+  await server.start();
+  await db();
 
   const app = express();
   const PORT = process.env.PORT || 3001;
@@ -23,9 +23,9 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
 
-  // app.use('/graphql', expressMiddleware(server as any, {
-  //   context: authenticateToken as any
-  // }));
+  app.use('/graphql', expressMiddleware(server as any, {
+    context: authenticateToken as any
+  }));
 
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/build')));

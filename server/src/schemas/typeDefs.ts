@@ -27,7 +27,6 @@ const typeDefs = `
     }
 
     input saveBookInput {
-        books: [Books]
         description: String
         title: String
         bookID: ID

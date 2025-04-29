@@ -1,9 +1,9 @@
-import Book from '../models';
-import User from '../models/User';
-import { signToken, AuthenticationError } from '../services/auth';
+import User from '../models/index.js';
+import Book from '../models/index.js';
+import { signToken, AuthenticationError } from '../services/auth.js';
 
 interface Book {
-    bookID: string;
+    bookId: string;
     authors: string[];
     description: string;
     title: string;
@@ -33,7 +33,7 @@ interface addUserArgs {
 
 interface saveBookArgs {
     input: {
-        bookID: string;
+        bookId: string;
         description: string;
         title: string;
         image: string;
@@ -42,7 +42,7 @@ interface saveBookArgs {
 }
 
 interface removeBookArgs {
-    bookID: string;
+    bookId: string;
 }
 
 interface Context {
@@ -89,11 +89,11 @@ const resolvers = {
             }
             throw new AuthenticationError('Not logged in');
         },
-        removeBook: async (_parent: any, { bookID }: removeBookArgs, context: Context) => {
+        removeBook: async (_parent: any, { bookId }: removeBookArgs, context: Context) => {
             if (context.user) {
                 const updatedUser = await User.findByIdAndUpdate(
                     { _id: context.user._id },
-                    { $pull: { savedBooks: { bookID } } },
+                    { $pull: { savedBooks: { bookId } } },
                     { new: true }
                 ).populate('savedBooks');
                 return updatedUser;

@@ -2,11 +2,11 @@
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { LOGIN_USER } from '../utils/mutations';
+import { LOGIN_USER } from '../utils/mutations.js';
 // import { loginUser } from '../utils/API';
 import { useMutation } from '@apollo/client';
-import Auth from '../utils/auth';
-import type { User } from '../models/User';
+import Auth from '../utils/auth.js';
+import type { User } from '../models/User.js';
 
 // biome-ignore lint/correctness/noEmptyPattern: <explanation>
 const LoginForm = ({}: { handleModalClose: () => void }) => {
@@ -19,7 +19,7 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
     setUserFormData({ ...userFormData, [name]: value });
   };
 
-  const [loginUserMutation] = useMutation(LOGIN_USER);
+  const [login] = useMutation(LOGIN_USER);
 
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,14 +39,17 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
       // }
 
       // const { token } = await response.json();
-      const { data } = await loginUserMutation({
-        variables: { ...userFormData },
+      
+      const { data } = await login({
+        variables: { ...userFormData},
       });
       const token = data.login.token;
+      console.log(data);
+      console.log(token);
 
       Auth.login(token);
     } catch (err) {
-      console.error(err);
+      console.log(err);
       setShowAlert(true);
     }
 

@@ -8,19 +8,10 @@ export const LOGIN_USER = gql`
                 _id
                 username
                 email
-                bookCount
-                savedBooks {
-                    bookID
-                    authors
-                    description
-                    title
-                    image
-                    link
-                }
+                password
             }
         }
-    }
-`;
+    }`;
 
 export const ADD_USER = gql`
     mutation addUser($username: String!, $email: String!, $password: String!) {
@@ -30,6 +21,7 @@ export const ADD_USER = gql`
                 _id
                 username
                 email
+                password
                 bookCount
                 savedBooks {
                     bookID
@@ -41,8 +33,7 @@ export const ADD_USER = gql`
                 }
             }
         }
-    }
-`;
+    }`;
 
 export const SAVE_BOOK = gql`
     mutation saveBook($input: saveBookInput!) {
@@ -50,9 +41,10 @@ export const SAVE_BOOK = gql`
             _id
             username
             email
+            password
             bookCount
             savedBooks {
-                bookID
+                bookId
                 authors
                 description
                 title
@@ -60,18 +52,18 @@ export const SAVE_BOOK = gql`
                 link
             }
         }
-    }
-`;
+    }`;
 
 export const REMOVE_BOOK = gql`
-    mutation removeBook($bookID: ID!) {
-        removeBook(bookID: $bookID) {
+    mutation removeBook($bookId: ID!) {
+        removeBook(bookId: $bookId) {
             _id
             username
             email
+            password
             bookCount
             savedBooks {
-                bookID
+                bookId
                 authors
                 description
                 title
@@ -79,20 +71,4 @@ export const REMOVE_BOOK = gql`
                 link
             }
         }
-    }
-`;
-
-
-
-
-
-
-
-
-
-
-
-
-}
-}
-`;
+    }`;

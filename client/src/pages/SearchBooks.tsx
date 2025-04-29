@@ -8,11 +8,11 @@ import {
   Card,
   Row
 } from 'react-bootstrap';
-import { SAVE_BOOK } from '../utils/mutations';
-import Auth from '../utils/auth';
+import { SAVE_BOOK } from '../utils/mutations.js';
+import Auth from '../utils/auth.js';
 import { searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
-import type { Book } from '../models/Book';
+import type { Book } from '../models/Book.js';
 import type { GoogleAPIBook } from '../models/GoogleAPIBook';
 import { useMutation } from '@apollo/client';
 
@@ -63,7 +63,7 @@ const SearchBooks = () => {
     }
   };
 
-  const [saveBookMutation] = useMutation(SAVE_BOOK); 
+  const [saveBook] = useMutation(SAVE_BOOK); 
 
   // create function to handle saving a book to our database
   const handleSaveBook = async (Id: string) => {
@@ -83,7 +83,7 @@ const SearchBooks = () => {
       // if (!response.ok) {
       //   throw new Error('something went wrong!');
       // }
-      await saveBookMutation({
+      await saveBook({
         variables: { input: { description, title, bookId, image, link } },
       });
       // if book successfully saves to user's account, save book id to state

@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'node:path';
 import db from './config/connection.js';
+import cors from 'cors';
 // import routes from './routes/index.js';
 import type { Request, Response } from 'express';
 import { ApolloServer } from '@apollo/server';
@@ -14,18 +15,32 @@ const server = new ApolloServer({
 });
 
 const startApolloServer = async () => {
+  try {
   await server.start();
   await db();
+  } catch (err) {
+    console.error('Error starting Apollo Server:', err);
+    process.exit(1);
+  }
 
-  const app = express();
   const PORT = process.env.PORT || 3001;
+  const app = express();
 
-  app.use(express.urlencoded({ extended: true }));
+  app.use(cors({
+    origin: 'http://localhost:3000', // Allow requests from this origin
+    credentials: true, // Allow cookies or authentication headers
+  }));
+
+  app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-  app.use('/graphql', expressMiddleware(server as any, {
+  app.use('/graphql', cors<cors.CorsRequest>({
+    origin: 'http://localhost:3000', // Allow requests from this origin
+    credentials: true, // Allow cookies or authentication headers
+  }), expressMiddleware(server as any, {
     context: authenticateToken as any
-  }));
+    }
+  ));
 
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/build')));

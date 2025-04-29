@@ -19,16 +19,17 @@ export const authenticateToken = ( { req }: any) => {
   }
 
   if (!token) {
-    return req;
+    return { user: null };
   }
 
   try {
     const { data }: any = jwt.verify(token, process.env.JWT_SECRET_KEY || '');
-    req.user = data;
+    console.log('Decoded token: ', data);
+    return { user: data };
   } catch (error) {
     console.log('Error message: ', error);
+    return { user: null };
   }
-  return req;
 
   // if (authHeader) {
   //   const token = authHeader.split(' ')[1];

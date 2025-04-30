@@ -69,9 +69,16 @@ const SearchBooks = () => {
   const handleSaveBook = async (Id: string) => {
     // find the book in `searchedBooks` state by the matching id
     const bookToSave: Book = searchedBooks.find((book) => book.bookId === Id)!;
-    const { description, title, bookId, image, link} = bookToSave;
+    const { description, title, bookId, image, authors} = bookToSave;
+    console.log(bookToSave);
+    console.log(bookId);
+    console.log(description);
+    console.log(title);
+    console.log(image);
+    console.log(authors);
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
+    console.log(token);
 
     if (!token) {
       return false;
@@ -84,7 +91,7 @@ const SearchBooks = () => {
       //   throw new Error('something went wrong!');
       // }
       await saveBook({
-        variables: { input: { description, title, bookId, image, link } },
+        variables: { input: { description, title, bookId, image, authors } },
       });
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);

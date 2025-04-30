@@ -32,7 +32,7 @@ const typeDefs = `
         title: String
         bookId: ID
         image: String
-        link: String
+        authors: [String]
     }
 
     type Mutation {

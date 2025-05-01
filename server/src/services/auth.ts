@@ -16,6 +16,7 @@ export const authenticateToken = ( { req }: any) => {
 
   if (req.headers.authorization) {
     token = token.split(' ').pop().trim();
+    console.log('Token: ', token);
   }
 
   if (!token) {
@@ -23,13 +24,15 @@ export const authenticateToken = ( { req }: any) => {
   }
 
   try {
-    const { data }: any = jwt.verify(token, process.env.JWT_SECRET_KEY || '');
+    const data: any = jwt.verify(token, process.env.JWT_SECRET_KEY || '');
+    console.log(process.env.JWT_SECRET_KEY);
     console.log('Decoded token: ', data);
-    return { user: data };
+    req.user = data;
   } catch (error) {
     console.log('Error message: ', error);
     return { user: null };
   }
+  return req;
 
   // if (authHeader) {
   //   const token = authHeader.split(' ')[1];

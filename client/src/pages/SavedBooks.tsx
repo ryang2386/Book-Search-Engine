@@ -9,6 +9,7 @@ import { removeBookId } from '../utils/localStorage';
 import type { User } from '../models/User.js';
 
 const SavedBooks = () => {
+  const [removeBook] = useMutation(REMOVE_BOOK);
   const [userData, setUserData] = useState<User>({
     username: '',
     email: '',
@@ -16,7 +17,19 @@ const SavedBooks = () => {
     savedBooks: [],
   });
 
+  const { loading } = useQuery(GET_ME, {
+    variables: { token: Auth.getToken() },
+    onCompleted: (data) => {
+      setUserData(data.me);
+      console.log('User data: ', data.me);
+    }
+  });
+
   // use this to determine if `useEffect()` hook needs to run again
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
+
   const userDataLength = Object.keys(userData).length;
 
   // useEffect(() => {
@@ -27,18 +40,7 @@ const SavedBooks = () => {
     //     if (!token) {
     //       return false;
     //     }
-        console.log(userData)
-        const { loading } = useQuery(GET_ME, {
-          variables: { token: Auth.getToken() },
-          onCompleted: (data) => {
-            setUserData(data.me);
-          }
-        });
-        console.log(userData);
 
-        if (loading) {
-          return <h2>Loading...</h2>;
-        }
 
         // const response = await getMe(token);
 
@@ -56,7 +58,6 @@ const SavedBooks = () => {
   //   getUserData();
   // }, [userDataLength]);
 
-  const [removeBook] = useMutation(REMOVE_BOOK);
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId: string) => {
@@ -67,29 +68,30 @@ const SavedBooks = () => {
     }
 
     try {
-      // const response = await deleteBook(bookId, token);
-
-      // if (!response.ok) {
-      //   throw new Error('something went wrong!');
-      // }
       await removeBook({
         variables: { bookId },
       });
+        } catch (err) {
+          console.error(err);
+        }
+        removeBookId(bookId);
+      };
 
-      // const updatedUser = await response.json();
-      // setUserData(updatedUser);
-      // upon success, remove book's id from localStorage
-      removeBookId(bookId);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // if data isn't here yet, say so
-  if (!userDataLength) {
-    return <h2>LOADING...</h2>;
-  }
-
+      if (!userDataLength) {
+        return <h2>LOADING...</h2>;
+      }
+      // const response = await deleteBook(bookId, token);
+      
+      // if (!response.ok) {
+        //   throw new Error('something went wrong!');
+        // }
+        
+        // const updatedUser = await response.json();
+        // setUserData(updatedUser);
+        // upon success, remove book's id from localStorage
+        
+        // if data isn't here yet, say so
+  console.log('Trying to render SavedBooks');
   return (
     <>
       <div className='text-light bg-dark p-5'>

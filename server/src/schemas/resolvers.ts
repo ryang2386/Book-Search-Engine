@@ -37,7 +37,7 @@ interface saveBookArgs {
         description: string;
         title: string;
         image: string;
-        link: string;
+        authors: string[];
     }
 }
 
@@ -79,6 +79,8 @@ const resolvers = {
             return { token, user };
         },
         saveBook: async (_parent: any, { input }: saveBookArgs, context: Context) => {
+            console.log(context.user);
+            console.log(input);
             if (context.user) {
                 const updatedUser = await User.findByIdAndUpdate(
                     context.user._id,

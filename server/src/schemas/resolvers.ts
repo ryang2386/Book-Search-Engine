@@ -74,7 +74,7 @@ const resolvers = {
             return { token, user };
         },
         addUser: async (_parent: any, { username, email, password }: addUserArgs) => {
-            const user = await User.create({ username, email, password });
+            const user = await User.create({ username, email, password, savedBooks: [] })
             const token = signToken(user.username, user.email, user._id);
             return { token, user };
         },
@@ -92,12 +92,14 @@ const resolvers = {
             throw new AuthenticationError('Not logged in');
         },
         removeBook: async (_parent: any, { bookId }: removeBookArgs, context: Context) => {
+            console.log(context.user);
             if (context.user) {
                 const updatedUser = await User.findByIdAndUpdate(
-                    { _id: context.user._id },
+                    context.user._id,
                     { $pull: { savedBooks: { bookId } } },
                     { new: true }
                 ).populate('savedBooks');
+                console.log(updatedUser);
                 return updatedUser;
             }
             throw new AuthenticationError('Not logged in');

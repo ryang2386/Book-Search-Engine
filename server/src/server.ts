@@ -39,7 +39,7 @@ const startApolloServer = async () => {
     credentials: true, // Allow cookies or authentication headers
   }), expressMiddleware(server as any, {
     context: authenticateToken as any
-    }
+  }
   ));
 
   if (process.env.NODE_ENV === 'production') {

@@ -10,7 +10,8 @@ import type { User } from '../models/User.js';
 // biome-ignore lint/correctness/noEmptyPattern: <explanation>
 const SignupForm = ({}: { handleModalClose: () => void }) => {
   // set initial form state
-  const [userFormData, setUserFormData] = useState<User>({ username: '', email: '', password: '', savedBooks: [] });
+  const [addUser] = useMutation(ADD_USER);
+  const [userFormData, setUserFormData] = useState<User>({ username: '', email: '', password: '', savedBooks: [], });
   // set state for form validation
   const [validated] = useState(false);
   // set state for alert
@@ -21,7 +22,6 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
     setUserFormData({ ...userFormData, [name]: value });
   };
 
-  const [addUser] = useMutation(ADD_USER);
 
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,7 +41,7 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
       // }
       
       const { data } = await addUser({
-        variables: { ...userFormData },
+        variables: { username: userFormData.username, email: userFormData.email, password: userFormData.password },
       });
       const token = data.addUser.token;
       console.log(data);

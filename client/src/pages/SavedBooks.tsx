@@ -9,7 +9,15 @@ import { removeBookId } from '../utils/localStorage';
 import type { User } from '../models/User.js';
 
 const SavedBooks = () => {
-  const [removeBook] = useMutation(REMOVE_BOOK);
+  const [removeBook] = useMutation(REMOVE_BOOK, {
+    update(cache, { data: { removeBook } }) {
+      cache.writeQuery({
+        query: GET_ME,
+        data: { me: removeBook },
+      });
+    },
+    });
+
   const [userData, setUserData] = useState<User>({
     username: '',
     email: '',
@@ -18,14 +26,12 @@ const SavedBooks = () => {
   });
 
   const { loading } = useQuery(GET_ME, {
-    variables: { token: Auth.getToken() },
     onCompleted: (data) => {
       setUserData(data.me);
       console.log('User data: ', data.me);
     }
   });
 
-  // use this to determine if `useEffect()` hook needs to run again
   if (loading) {
     return <h2>Loading...</h2>;
   }
@@ -75,6 +81,9 @@ const SavedBooks = () => {
           console.error(err);
         }
         removeBookId(bookId);
+        // upon success, remove book's id from userData SavedBooks array
+        const updatedUser = userData.savedBooks.filter((book) => book.bookId !== bookId);
+        setUserData({ ...userData, savedBooks: updatedUser });
       };
 
       if (!userDataLength) {
@@ -92,6 +101,8 @@ const SavedBooks = () => {
         
         // if data isn't here yet, say so
   console.log('Trying to render SavedBooks');
+  console.log('User data: ', userData);
+  console.log(userData.savedBooks);
   return (
     <>
       <div className='text-light bg-dark p-5'>

@@ -27,12 +27,11 @@ export const authenticateToken = ( { req }: any) => {
     const data: any = jwt.verify(token, process.env.JWT_SECRET_KEY || '');
     console.log(process.env.JWT_SECRET_KEY);
     console.log('Decoded token: ', data);
-    req.user = data;
+    return { user: data };
   } catch (error) {
     console.log('Error message: ', error);
     return { user: null };
   }
-  return req;
 
   // if (authHeader) {
   //   const token = authHeader.split(' ')[1];

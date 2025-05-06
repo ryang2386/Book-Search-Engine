@@ -10,6 +10,8 @@ import apiRoutes from './api/index.js';
 
 router.use('/api', apiRoutes);
 
+router.use(express.static(path.join(__dirname, '../../client/build')));
+
 // serve up react front-end in production
 router.use((_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../../client/build/index.html'));

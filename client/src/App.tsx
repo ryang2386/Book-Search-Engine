@@ -5,7 +5,7 @@ import { setContext } from '@apollo/client/link/context';
 import Navbar from './components/Navbar';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3001/graphql',
+  uri: import.meta.env.VITE_ARI_URL,
 });
 
 const authLink = setContext((_, { headers }) => {

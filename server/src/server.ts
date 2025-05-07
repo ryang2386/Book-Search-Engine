@@ -30,7 +30,7 @@ const startApolloServer = async () => {
   const __dirname = path.dirname(__filename);
 
   app.use(cors({
-    origin: 'http://localhost:3000', // Allow requests from this origin
+    origin: ['http://localhost:3000', 'https://book-search-engine-y11k.onrender.com/'], // Allow requests from this origin
     credentials: true, // Allow cookies or authentication headers
   }));
 

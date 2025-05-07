@@ -7,7 +7,6 @@ import path from 'node:path';
 
 // import { fileURLToPath } from 'node:url';
 // const __dirname = path.dirname(__filename);
-const __dirname = new URL('.', import.meta.url).pathname;
 import apiRoutes from './api/index.js';
 
 router.use('/api', apiRoutes);

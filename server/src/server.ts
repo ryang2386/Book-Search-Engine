@@ -25,6 +25,7 @@ const startApolloServer = async () => {
 
   const PORT = process.env.PORT || 3001;
   const app = express();
+  const __dirname = new URL('.', import.meta.url).pathname;
 
   app.use(cors({
     origin: 'http://localhost:3000', // Allow requests from this origin

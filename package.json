@@ -4,11 +4,11 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "start": "cd client && npm run build && cd ../server && npm run start",
+    "start": "node server/dist/index.js",
     "start:dev": "concurrently \"cd server && npm run watch\" \"wait-on tcp:3001 && cd client && npm run dev\"",
     "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm run dev\"",
     "install": "cd server && npm i && cd ../client && npm i",
-    "build": "concurrently \"cd server && npm run build\" \"cd client && npm run build\"",
+    "build": "cd client && npm install && npm run build && cd ../server && tsc",
     "render-build": "npm install && npm run build",
     "server": "cd server && npm run start"
   },
